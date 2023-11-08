@@ -1,0 +1,16 @@
+[general]
+auth_url = 'https://stageauth.equilend.com/auth/realms/1Source/protocol/openid-connect/token'
+
+[endpoints]
+events = 'https://stageapi.equilend.com/v1/ledger/events'
+parties = 'https://stageapi.equilend.com/v1/ledger/parties'
+agreements = 'https://stageapi.equilend.com/v1/ledger/agreements'
+contracts = 'https://stageapi.equilend.com/v1/ledger/contracts'
+
+[authentication]
+auth_type = 'BEARER'
+grant_type = 'password'
+client_id = 'canton-participant1-client'
+username = 'TestBorrower1User'
+password = 'FqnNQyUwaenQ8K3h'
+client_secret = 'c0a05c2d-ac70-472a-ac4f-38b80dba28d8'
