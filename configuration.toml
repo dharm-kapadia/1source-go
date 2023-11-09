@@ -1,5 +1,6 @@
 [general]
-auth_url = 'https://stageauth.equilend.com/auth/realms/1Source/protocol/openid-connect/token'
+auth_url = 'https://stageauth.equilend.com/auth'
+realm_name = '1Source'
 
 [endpoints]
 events = 'https://stageapi.equilend.com/v1/ledger/events'
