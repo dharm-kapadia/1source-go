@@ -8,7 +8,8 @@ type (
 	}
 
 	general struct {
-		Auth_URL string
+		Auth_URL   string
+		Realm_Name string
 	}
 
 	endpoints struct {

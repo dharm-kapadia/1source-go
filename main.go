@@ -5,12 +5,16 @@ import (
 	"log"
 	"os"
 
+	"github.com/Nerzal/gocloak/v13"
+	api "github.com/dharm-kapadia/1source-go/api"
 	"github.com/dharm-kapadia/1source-go/models"
-	utils "github.com/dharm-kapadia/1source-go/utils"
+	"github.com/dharm-kapadia/1source-go/utils"
 )
 
 var (
 	LOG_FILE string = "1source-go.log"
+	fileName string
+	token    *gocloak.JWT
 )
 
 func displayVersion() {
@@ -71,9 +75,10 @@ func main() {
 	if len(argsWithoutProg) == 2 {
 		// Command line of length 2 means -t TOML file
 		if argsWithoutProg[0] == "-t" {
-			filename := argsWithoutProg[1]
+			fileName = argsWithoutProg[1]
 
-			appConfig, err = utils.ReadTOML(filename)
+			// Read and parse configuration TOML file
+			appConfig, err = utils.ReadTOML(fileName)
 
 			if err != nil {
 				log.Println("Error reading and parsing configuration TOML file: ", err)
@@ -84,6 +89,73 @@ func main() {
 		} else {
 			log.Println("Unknown command line flag combination")
 			os.Exit(200)
+		}
+
+		// Graceful exit after reading and parsing configuration TOML file
+		os.Exit(0)
+	}
+
+	if len(argsWithoutProg) == 3 {
+		log.Println("Unknown command line flag combination")
+		os.Exit(300)
+	}
+
+	if len(argsWithoutProg) == 4 {
+		fileName = argsWithoutProg[1]
+
+		// Read and parse configuration TOML file
+		appConfig, err = utils.ReadTOML(fileName)
+
+		if err != nil {
+			log.Println("Error reading and parsing configuration TOML file: ", err)
+			os.Exit(100)
+		}
+
+		token, err = api.GetAuthToken(appConfig)
+
+		if err != nil {
+			log.Panic("Error retrieving Auth Token: ", err)
+			panic(err)
+		} else {
+			fmt.Println("Auth token: ", token.AccessToken)
+		}
+
+		// Get the 3rd command line parameter
+		param := argsWithoutProg[2]
+		entity := argsWithoutProg[3]
+
+		switch param {
+		// Get all of a particular type from teh API
+		case "-o":
+			switch entity {
+			case "agreements":
+				break
+
+			case "contracts":
+				break
+
+			case "events":
+				break
+
+			case "parties":
+				break
+			}
+
+		// Get trade agreement by agreement_id
+		case "-a":
+			break
+
+		// Get event agreement by event_id
+		case "-e":
+			break
+
+		// Get contract by contract_id
+		case "-c":
+			break
+
+		// Get party by party_id
+		case "-p":
+			break
 		}
 	}
 }
