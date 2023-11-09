@@ -2,7 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
+
+	"github.com/dharm-kapadia/1source-go/models"
+	utils "github.com/dharm-kapadia/1source-go/utils"
+)
+
+var (
+	LOG_FILE string = "1source-go.log"
 )
 
 func displayVersion() {
@@ -24,19 +32,36 @@ func displayHelp() {
 }
 
 func main() {
+	var appConfig *models.AppConfig
+
+	// Open the log file
+	var logFile, err = os.OpenFile(LOG_FILE, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer logFile.Close()
+	log.SetOutput(logFile)
+
+	if len(os.Args) < 1 {
+		displayHelp()
+
+		// Graceful exit after displaying help
+		os.Exit(0)
+	}
+
 	argsWithoutProg := os.Args[1:]
 
 	// Command line of length 1 usually means help or version info requested
 	if len(argsWithoutProg) == 1 {
 		switch argsWithoutProg[0] {
-		case "--help":
+		case "--help", "help", "-h":
 			displayHelp()
-		case "-h":
+		case "--version", "-v":
+			displayVersion()
+		default:
 			displayHelp()
-		case "--version":
-			displayVersion()
-		case "-v":
-			displayVersion()
 		}
 
 		// Graceful exit after displaying help
@@ -47,10 +72,18 @@ func main() {
 		// Command line of length 2 means -t TOML file
 		if argsWithoutProg[0] == "-t" {
 			filename := argsWithoutProg[1]
-			fmt.Printf("TOML file name = %s\n", filename)
 
+			appConfig, err = utils.ReadTOML(filename)
+
+			if err != nil {
+				log.Println("Error reading and parsing configuration TOML file: ", err)
+				os.Exit(100)
+			}
+
+			fmt.Println(appConfig.General.Auth_URL)
 		} else {
-			fmt.Println("Unknown command line flag combination")
+			log.Println("Unknown command line flag combination")
+			os.Exit(200)
 		}
 	}
 }
