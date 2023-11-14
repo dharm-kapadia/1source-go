@@ -1,8 +1,8 @@
+// Package api provides functions for HTTP verb access to 1Source REST API.
 package api
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,6 +12,11 @@ import (
 
 type PartiesApiService service
 
+// Get() performs an HTTP Get operation on the 1Source REST API
+// It is used to get all entities of a type (Events, Parties,
+// Trade Agreements, Contracts) or it can retrieve one of those
+// entities based on an Id
+// It returns the entities from the query and any error encountered.
 func Get(apiEndpoint string, bearer string) (string, error) {
 	ctx := context.Background()
 	transport := &http.Transport{
@@ -28,6 +33,11 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 
 	request, err := http.NewRequestWithContext(ctx, "GET", apiEndpoint, nil)
 	request.Header.Set("Authorization", bearer)
+
+	if err != nil {
+		log.Println("Error creating new HTTP Request: ", err)
+		return "", err
+	}
 
 	log.Println("Calling API endpoint: ", apiEndpoint)
 	response, err := client.Do(request)
@@ -46,7 +56,6 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 			log.Println("Error in response status. [ERR] -", response.StatusCode)
 		} else {
 			data, _ := io.ReadAll(response.Body)
-			fmt.Println(string(data))
 			return string(data), err
 		}
 	}

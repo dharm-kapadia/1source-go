@@ -179,19 +179,39 @@ func main() {
 
 		// Get trade agreement by agreement_id
 		case "-a":
-			break
+			endPoint = appConfig.Endpoints.Agreements + "/" + entity
+			agreement, err := api.Get(endPoint, bearer)
+			if err == nil {
+				fmt.Println("Details for 1Source Trade Agreement:", entity)
+				fmt.Println(agreement)
+			}
 
 		// Get event agreement by event_id
 		case "-e":
-			break
+			endPoint = appConfig.Endpoints.Events + "/" + entity
+			event, err := api.Get(endPoint, bearer)
+			if err == nil {
+				fmt.Println("Details for 1Source Event:", entity)
+				fmt.Println(event)
+			}
 
 		// Get contract by contract_id
 		case "-c":
-			break
+			endPoint = appConfig.Endpoints.Contracts + "/" + entity
+			contract, err := api.Get(endPoint, bearer)
+			if err == nil {
+				fmt.Println("Details for 1Source Contract:", entity)
+				fmt.Println(contract)
+			}
 
 		// Get party by party_id
 		case "-p":
-			break
+			endPoint = appConfig.Endpoints.Parties + "/" + entity
+			party, err := api.Get(endPoint, bearer)
+			if err == nil {
+				fmt.Println("Details for 1Source Party:", entity)
+				fmt.Println(party)
+			}
 		}
 	}
 }
