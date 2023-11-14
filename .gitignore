@@ -30,4 +30,4 @@ go.work
 1source-go
 
 # Debug
-_debug_*
+__debug_*
