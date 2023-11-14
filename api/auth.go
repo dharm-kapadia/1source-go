@@ -1,4 +1,4 @@
-package auth
+package api
 
 import (
 	"context"
@@ -9,12 +9,15 @@ import (
 	"github.com/dharm-kapadia/1source-go/models"
 )
 
+// GetAuthToken logs into KeyCloak using credentials from the configuration
+// TOML file to retrieve an Auth Token, which is used in subsequent calls to
+// the 1Source REST API
 func GetAuthToken(cfg *models.AppConfig) (*gocloak.JWT, error) {
 	var token *gocloak.JWT
 	var err error
 
 	// Log into KeyCloak to get Auth Token
-	log.Println("Logging into Keyclock to get Auth Token")
+	log.Println("Logging into KeyCloak to get Auth Token")
 	client := gocloak.NewClient(cfg.General.Auth_URL)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
@@ -24,7 +27,8 @@ func GetAuthToken(cfg *models.AppConfig) (*gocloak.JWT, error) {
 
 	if err != nil {
 		log.Panic("Error retrieving Auth token", err)
-		panic("Error retrieving Auth token")
+	} else {
+		log.Println("Successfully received Auth token")
 	}
 
 	return token, err
