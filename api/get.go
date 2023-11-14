@@ -1,25 +1,33 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"time"
 )
 
 type PartiesApiService service
 
 func Get(apiEndpoint string, bearer string) (string, error) {
-	client := &http.Client{Timeout: time.Duration(5) * time.Second}
-
-	request, err := http.NewRequest(http.MethodGet, apiEndpoint, nil)
-	request.Header.Set("Authorization", bearer)
-
-	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
-		req.Header.Set("Authorization", via[0].Header.Get("Authorization"))
-		return nil
+	ctx := context.Background()
+	transport := &http.Transport{
+		Proxy: func(r *http.Request) (*url.URL, error) {
+			r.Header.Set("Authorization", bearer)
+			return nil, nil
+		},
 	}
+
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   time.Duration(10) * time.Second,
+	}
+
+	request, err := http.NewRequestWithContext(ctx, "GET", apiEndpoint, nil)
+	request.Header.Set("Authorization", bearer)
 
 	log.Println("Calling API endpoint: ", apiEndpoint)
 	response, err := client.Do(request)
