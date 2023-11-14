@@ -21,12 +21,13 @@ var (
 
 // displayVersion prints the program version
 func displayVersion() {
-	fmt.Println("1source-go V1.0.2")
+	fmt.Println("1source-go V0.1")
 }
 
 // displayHelp creates the complete help string output for the command line
 func displayHelp() {
-	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]\n\n")
+	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]\n")
+	fmt.Print("Note: -t is required\n\n")
 	fmt.Println("Optional arguments:")
 	fmt.Println("-h, --help\tshows help message and exits")
 	fmt.Println("-v, --version\tprints version information and exits")
@@ -60,7 +61,7 @@ func main() {
 	log.SetOutput(logFile)
 
 	// Begin parsing the command line arguments
-	if len(os.Args) < 1 {
+	if len(os.Args) == 1 {
 		displayHelp()
 
 		// Graceful exit after displaying help
@@ -97,8 +98,6 @@ func main() {
 				log.Println("Error reading and parsing configuration TOML file: ", err)
 				os.Exit(10)
 			}
-
-			fmt.Println(appConfig.General.Auth_URL)
 		} else {
 			log.Println("Unknown command line flag combination")
 			os.Exit(20)
