@@ -5,30 +5,23 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
 
 type PartiesApiService service
 
 func Get(apiEndpoint string, bearer string) (string, error) {
-
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Duration(5) * time.Second}
 
 	request, err := http.NewRequest(http.MethodGet, apiEndpoint, nil)
-
 	request.Header.Set("Authorization", bearer)
-	request.Header.Set("User-Agent", "1source-go Command Line")
-	request.Header.Set("Accept", "*/*")
-	request.Header.Set("ContentType", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
-		for key, val := range via[0].Header {
-			req.Header[key] = val
-		}
-
-		log.Println("Received Redirect Error:", err)
-		return err
+		req.Header.Set("Authorization", via[0].Header.Get("Authorization"))
+		return nil
 	}
 
+	log.Println("Calling API endpoint: ", apiEndpoint)
 	response, err := client.Do(request)
 
 	defer func(Body io.ReadCloser) {

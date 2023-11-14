@@ -132,7 +132,7 @@ func main() {
 		if err != nil {
 			log.Panic("Error retrieving Auth Token: ", err)
 		} else {
-			bearer = "Bearer " + token.AccessToken
+			bearer = `Bearer ` + token.AccessToken
 		}
 
 		// Get the 3rd and 4th command line parameters
