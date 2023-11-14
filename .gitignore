@@ -28,3 +28,6 @@ go.work
 
 # Executable
 1source-go
+
+# Debug
+_debug_*
