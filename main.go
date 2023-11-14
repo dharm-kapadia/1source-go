@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/Nerzal/gocloak/v13"
-	api "github.com/dharm-kapadia/1source-go/api"
+	"github.com/dharm-kapadia/1source-go/api"
 	"github.com/dharm-kapadia/1source-go/models"
 	"github.com/dharm-kapadia/1source-go/utils"
 )
@@ -15,6 +15,8 @@ var (
 	LogFile  = "1source-go.log"
 	fileName string
 	token    *gocloak.JWT
+	endPoint string
+	bearer   string
 )
 
 // displayVersion prints the program version
@@ -129,6 +131,8 @@ func main() {
 
 		if err != nil {
 			log.Panic("Error retrieving Auth Token: ", err)
+		} else {
+			bearer = "Bearer " + token.AccessToken
 		}
 
 		// Get the 3rd and 4th command line parameters
@@ -141,22 +145,36 @@ func main() {
 		case "-o":
 			switch entity {
 			case "agreements":
-				break
+				endPoint = appConfig.Endpoints.Agreements
+				agreements, err := api.Get(endPoint, bearer)
+				if err == nil {
+					fmt.Println("1Source Agreements:")
+					fmt.Println(agreements)
+				}
 
 			case "contracts":
-				break
+				endPoint = appConfig.Endpoints.Contracts
+				contracts, err := api.Get(endPoint, bearer)
+				if err == nil {
+					fmt.Println("1Source Contracts:")
+					fmt.Println(contracts)
+				}
 
 			case "events":
-				break
+				endPoint = appConfig.Endpoints.Parties
+				events, err := api.Get(endPoint, bearer)
+				if err == nil {
+					fmt.Println("1Source Events:")
+					fmt.Println(events)
+				}
 
 			case "parties":
-				bearer := "Bearer " + token.AccessToken
-				parties, err := api.GetParties(appConfig.Endpoints.Parties, bearer)
+				endPoint = appConfig.Endpoints.Parties
+				parties, err := api.Get(endPoint, bearer)
 				if err == nil {
 					fmt.Println("1Source Parties:")
 					fmt.Println(parties)
 				}
-				break
 			}
 
 		// Get trade agreement by agreement_id
