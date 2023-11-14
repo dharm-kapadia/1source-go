@@ -25,3 +25,6 @@ go.work
 *.log
 
 .idea/
+
+# Executable
+1source-go
