@@ -15,6 +15,11 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 
 	request, err := http.NewRequest(http.MethodGet, apiEndpoint, nil)
 
+	request.Header.Set("Authorization", bearer)
+	request.Header.Set("User-Agent", "1source-go Command Line")
+	request.Header.Set("Accept", "*/*")
+	request.Header.Set("ContentType", "application/x-www-form-urlencoded; charset=UTF-8")
+
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		for key, val := range via[0].Header {
 			req.Header[key] = val
@@ -23,11 +28,6 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 		log.Println("Received Redirect Error:", err)
 		return err
 	}
-
-	request.Header.Set("Authorization", bearer)
-	request.Header.Set("User-Agent", "1source-go Command Line")
-	request.Header.Set("Accept", "*/*")
-	request.Header.Set("ContentType", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	response, err := client.Do(request)
 

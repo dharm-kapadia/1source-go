@@ -161,7 +161,7 @@ func main() {
 				}
 
 			case "events":
-				endPoint = appConfig.Endpoints.Parties
+				endPoint = appConfig.Endpoints.Events
 				events, err := api.Get(endPoint, bearer)
 				if err == nil {
 					fmt.Println("1Source Events:")
