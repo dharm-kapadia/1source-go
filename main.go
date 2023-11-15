@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/dharm-kapadia/1source-go/api"
@@ -116,62 +117,57 @@ func main() {
 		param := argsWithoutProg[2]
 		entity := argsWithoutProg[3]
 
-		var endPoint string
-
 		switch param {
 		// Get all of a particular type from the API
 		case "-g":
 			switch entity {
 			case "events":
-				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Events")
+				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Events", true)
 
 			case "parties":
-				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties")
+				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties", true)
 
 			case "agreements":
-				api.GetEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements")
+				api.GetEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements", true)
 
 			case "contracts":
-				api.GetEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts")
+				api.GetEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts", true)
 
 			case "rerates":
-				api.GetEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates")
+				api.GetEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates", true)
 
 			case "returns":
-				api.GetEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns")
+				api.GetEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns", true)
 
 			case "recalls":
-				api.GetEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls")
+				api.GetEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls", true)
 
 			case "buyins":
-				api.GetEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins")
+				api.GetEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins", true)
 
 			default:
 				log.Println("Unknown command-line entity entered: ", entity)
+				fmt.Println("Unknown command-line entity entered: ", entity)
 			}
 
 		// Get trade agreement by agreement_id
 		case "-a":
-			endPoint = appConfig.Endpoints.Agreements + "/" + entity
-			api.GetEntityById(endPoint, entity, bearer, "Agreement")
+			api.GetEntityById(appConfig.Endpoints.Agreements, entity, bearer, "Agreement", true)
 
 		// Get event agreement by event_id
 		case "-e":
-			endPoint = appConfig.Endpoints.Events + "/" + entity
-			api.GetEntityById(endPoint, entity, bearer, "Event")
+			api.GetEntityById(appConfig.Endpoints.Events, entity, bearer, "Event", true)
 
 		// Get contract by contract_id
 		case "-c":
-			endPoint = appConfig.Endpoints.Contracts + "/" + entity
-			api.GetEntityById(endPoint, entity, bearer, "Contract")
+			api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "Contract", true)
 
 		// Get party by party_id
 		case "-p":
-			endPoint = appConfig.Endpoints.Parties + "/" + entity
-			api.GetEntityById(endPoint, entity, bearer, "Party")
+			api.GetEntityById(appConfig.Endpoints.Parties, entity, bearer, "Party", true)
 
 		// Propose contract
-		case "-i":
+		case "-cp":
 			// Read on JSON file specified on the command line as bytes
 			body, err := os.ReadFile(entity)
 			if err != nil {
@@ -186,6 +182,23 @@ func main() {
 			if err == nil {
 				fmt.Println("Successfully created Proposed Contract")
 			}
+
+		// Cancel and proposed contract
+		case "-ca":
+			// Get the Contract by contract_id to check that it is in the proposed state
+			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "Contract", false)
+
+			if err != nil {
+				log.Printf("Error GET %s by id [%s]: %s", "Contract", entity, err)
+			} else {
+				// Check the state of the contract
+				if strings.Contains(contract, "PROPOSED") {
+					fmt.Println(contract)
+				} else {
+					fmt.Printf("Contract with id [%s] is not in PROPOSED state\n", entity)
+				}
+			}
+
 		default:
 			log.Println("Unknown command-line switch entered: ", argsWithoutProg)
 		}

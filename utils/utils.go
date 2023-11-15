@@ -83,6 +83,9 @@ func DisplayHelp() {
 	fmt.Println("-c\t\t1Source API Endpoint to query contracts by contract_id")
 	fmt.Print("-p\t\t1Source API Endpoint to query parties by party_id\n\n")
 
-	fmt.Println("-i\t\t1Source API Endpoint to propose a contract from a JSON file")
+	fmt.Println("-cp\t\t1Source API Endpoint to propose a contract from a JSON file")
+	fmt.Println("-cc\t\t1Source API Endpoint to cancel a proposed contract by contract_id")
+	fmt.Println("-ca\t\t1Source API Endpoint to approve a proposed contract by contract_id")
+	fmt.Println("-cd\t\t1Source API Endpoint to decline a proposed contract by contract_id")
 	fmt.Println("")
 }
