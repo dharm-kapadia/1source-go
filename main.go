@@ -170,10 +170,22 @@ func main() {
 			endPoint = appConfig.Endpoints.Parties + "/" + entity
 			api.GetEntityById(endPoint, entity, bearer, "Party")
 
-			// Propose contract
-			// case "-i":
-			// 	endPoint = appConfig.Endpoints.Contracts
+		// Propose contract
+		case "-i":
+			// Read on JSON file specified on the command line as bytes
+			body, err := os.ReadFile(entity)
+			if err != nil {
+				fmt.Printf("Error JSON reading file [%s]: %s\n", entity, err)
+				log.Printf("Error JSON reading file [%s]: %s\n", entity, err)
+			}
 
+			// Do HTTP PostProposeContract to initiate the contract
+			// Errors are handled in the function
+			_, err = api.PostProposeContract(appConfig.Endpoints.Contracts, bearer, body)
+
+			if err == nil {
+				fmt.Println("Successfully created Proposed Contract")
+			}
 		default:
 			log.Println("Unknown command-line switch entered: ", argsWithoutProg)
 		}

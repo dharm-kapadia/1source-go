@@ -1,10 +1,12 @@
+// Package api provides functions for HTTP verb access to 1Source REST API.
 package api
 
 import (
 	"context"
+	"log"
+
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/dharm-kapadia/1source-go/models"
-	"log"
 )
 
 // GetAuthToken logs into KeyCloak using credentials from the configuration

@@ -17,7 +17,7 @@ import (
 // Trade Agreements, Contracts) or it can retrieve one of those
 // entities based on an Id
 // It returns the entities from the query and any error encountered.
-func Get(apiEndpoint string, bearer string) (string, error) {
+func Get(apiEndPoint string, bearer string) (string, error) {
 	ctx := context.Background()
 	transport := &http.Transport{
 		Proxy: func(r *http.Request) (*url.URL, error) {
@@ -31,7 +31,7 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 		Timeout:   time.Duration(10) * time.Second,
 	}
 
-	request, err := http.NewRequestWithContext(ctx, "GET", apiEndpoint, nil)
+	request, err := http.NewRequestWithContext(ctx, "GET", apiEndPoint, nil)
 	request.Header.Set("Authorization", bearer)
 
 	if err != nil {
@@ -39,7 +39,7 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 		return "", err
 	}
 
-	log.Println("Calling API endpoint: ", apiEndpoint)
+	log.Println("Calling API endpoint: ", apiEndPoint)
 	response, err := client.Do(request)
 
 	defer func(Body io.ReadCloser) {
@@ -50,7 +50,7 @@ func Get(apiEndpoint string, bearer string) (string, error) {
 	}(response.Body)
 
 	if err != nil {
-		log.Println("Error on response.\n[ERR] -", err)
+		log.Println("Error in response.\n[ERR] -", err)
 	} else {
 		if response.StatusCode != http.StatusOK {
 			log.Println("Error in response status. [ERR] -", response.StatusCode)
