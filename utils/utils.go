@@ -83,6 +83,6 @@ func DisplayHelp() {
 	fmt.Println("-c\t\t1Source API Endpoint to query contracts by contract_id")
 	fmt.Print("-p\t\t1Source API Endpoint to query parties by party_id\n\n")
 
-	fmt.Println("-t\t\t1Source API Endpoint to propose a contract from a JSON file")
+	fmt.Println("-i\t\t1Source API Endpoint to propose a contract from a JSON file")
 	fmt.Println("")
 }
