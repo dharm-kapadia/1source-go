@@ -70,7 +70,7 @@ func DisplayVersion() {
 
 // displayHelp creates the complete help string output for the command line
 func DisplayHelp() {
-	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]\n")
+	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR] [-i JSON]\n")
 	fmt.Print("Note: -t is required\n\n")
 	fmt.Println("Optional arguments:")
 	fmt.Println("-h, --help\tshows help message and exits")
@@ -81,5 +81,8 @@ func DisplayHelp() {
 	fmt.Println("-a\t\t1Source API Endpoint to query trade agreements by agreement_id")
 	fmt.Println("-e\t\t1Source API Endpoint to query events by event_id")
 	fmt.Println("-c\t\t11Source API Endpoint to query contracts by contract_id")
-	fmt.Println("-p\t\t1Source API Endpoint to query parties by party_id")
+	fmt.Print("-p\t\t1Source API Endpoint to query parties by party_id\n\n")
+
+	fmt.Println("-t\t\t11Source API Endpoint to propose a contract from a JSON file")
+	fmt.Println("")
 }

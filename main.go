@@ -145,6 +145,9 @@ func main() {
 
 			case "buyins":
 				api.GetEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins")
+
+			default:
+				log.Println("Unknown command-line entity entered: ", entity)
 			}
 
 		// Get trade agreement by agreement_id
@@ -170,6 +173,9 @@ func main() {
 			// Propose contract
 			// case "-i":
 			// 	endPoint = appConfig.Endpoints.Contracts
+
+		default:
+			log.Println("Unknown command-line switch entered: ", argsWithoutProg)
 		}
 	}
 }
