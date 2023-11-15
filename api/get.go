@@ -10,9 +10,7 @@ import (
 	"time"
 )
 
-type PartiesApiService service
-
-// Get() performs an HTTP Get operation on the 1Source REST API
+// Get performs an HTTP GET operation on the 1Source REST API
 // It is used to get all entities of a type (Events, Parties,
 // Trade Agreements, Contracts) or it can retrieve one of those
 // entities based on an Id

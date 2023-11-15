@@ -13,10 +13,15 @@ type (
 	}
 
 	endpoints struct {
-		Events     string
+		Base       string
 		Parties    string
+		Events     string
 		Agreements string
 		Contracts  string
+		Rerates    string
+		Returns    string
+		Recalls    string
+		Buyins     string
 	}
 
 	authentication struct {

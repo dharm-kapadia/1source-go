@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/dharm-kapadia/1source-go/api"
@@ -16,7 +17,6 @@ var (
 	fileName string
 	token    *gocloak.JWT
 	endPoint string
-	bearer   string
 )
 
 // displayVersion prints the program version
@@ -32,7 +32,7 @@ func displayHelp() {
 	fmt.Println("-h, --help\tshows help message and exits")
 	fmt.Println("-v, --version\tprints version information and exits")
 	fmt.Println("-t\t\t1Source configuration TOML file [required]")
-	fmt.Println("-o\t\t1Source API Endpoint to query [agreements, contracts, events, parties ]")
+	fmt.Println("-g\t\t1Source API Endpoint to query [agreements, contracts, events, parties, returns, rerates, recalls, buyins ]")
 
 	fmt.Println("-a\t\t1Source API Endpoint to query trade agreements by agreement_id")
 	fmt.Println("-e\t\t1Source API Endpoint to query events by event_id")
@@ -127,6 +127,7 @@ func main() {
 
 		// Get Auth Token using credentials from config file
 		token, err = api.GetAuthToken(appConfig)
+		var bearer string
 
 		if err != nil {
 			log.Panic("Error retrieving Auth Token: ", err)
@@ -141,76 +142,82 @@ func main() {
 
 		switch param {
 		// Get all of a particular type from the API
-		case "-o":
+		case "-g":
 			switch entity {
-			case "agreements":
-				endPoint = appConfig.Endpoints.Agreements
-				agreements, err := api.Get(endPoint, bearer)
-				if err == nil {
-					fmt.Println("1Source Agreements:")
-					fmt.Println(agreements)
-				}
-
-			case "contracts":
-				endPoint = appConfig.Endpoints.Contracts
-				contracts, err := api.Get(endPoint, bearer)
-				if err == nil {
-					fmt.Println("1Source Contracts:")
-					fmt.Println(contracts)
-				}
-
 			case "events":
-				endPoint = appConfig.Endpoints.Events
-				events, err := api.Get(endPoint, bearer)
-				if err == nil {
-					fmt.Println("1Source Events:")
-					fmt.Println(events)
-				}
+				getEntity(appConfig.Endpoints.Parties, bearer, "1Source Events")
 
 			case "parties":
-				endPoint = appConfig.Endpoints.Parties
-				parties, err := api.Get(endPoint, bearer)
-				if err == nil {
-					fmt.Println("1Source Parties:")
-					fmt.Println(parties)
-				}
+				getEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties")
+
+			case "agreements":
+				getEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements")
+
+			case "contracts":
+				getEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts")
+
+			case "rerates":
+				getEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates")
+
+			case "returns":
+				getEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns")
+
+			case "recalls":
+				getEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls")
+
+			case "buyins":
+				getEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins")
 			}
 
 		// Get trade agreement by agreement_id
 		case "-a":
 			endPoint = appConfig.Endpoints.Agreements + "/" + entity
-			agreement, err := api.Get(endPoint, bearer)
-			if err == nil {
-				fmt.Println("Details for 1Source Trade Agreement:", entity)
-				fmt.Println(agreement)
-			}
+			getEntityById(endPoint, entity, bearer, "Agreement")
 
 		// Get event agreement by event_id
 		case "-e":
 			endPoint = appConfig.Endpoints.Events + "/" + entity
-			event, err := api.Get(endPoint, bearer)
-			if err == nil {
-				fmt.Println("Details for 1Source Event:", entity)
-				fmt.Println(event)
-			}
+			getEntityById(endPoint, entity, bearer, "Event")
 
 		// Get contract by contract_id
 		case "-c":
 			endPoint = appConfig.Endpoints.Contracts + "/" + entity
-			contract, err := api.Get(endPoint, bearer)
-			if err == nil {
-				fmt.Println("Details for 1Source Contract:", entity)
-				fmt.Println(contract)
-			}
+			getEntityById(endPoint, entity, bearer, "Contract")
 
 		// Get party by party_id
 		case "-p":
 			endPoint = appConfig.Endpoints.Parties + "/" + entity
-			party, err := api.Get(endPoint, bearer)
-			if err == nil {
-				fmt.Println("Details for 1Source Party:", entity)
-				fmt.Println(party)
-			}
+			getEntityById(endPoint, entity, bearer, "Party")
+
+		// Propose contract
+		case "-i":
+			endPoint = appConfig.Endpoints.Contracts
 		}
+	}
+}
+
+// getEntityById is a helper function to perform an HTTP GET to
+// retrieve a particular entity by Id from the 1Source REST API
+func getEntityById(endPoint string, id, bearer string, header string) {
+	agreement, err := api.Get(endPoint, bearer)
+	if err == nil {
+		fmt.Println(header)
+		fmt.Println(strings.Repeat("=", len(header)))
+		fmt.Println(agreement)
+	} else {
+		log.Printf("Error GET %s by id [%s]: %s", header, id, err)
+	}
+}
+
+// getEntity is a helper function to perform an HTTP GET
+// to retrieve entity-level data from the 1Source REST API
+func getEntity(endPoint string, bearer string, header string) {
+	entity, err := api.Get(endPoint, bearer)
+	if err == nil {
+		fmt.Println(header)
+		fmt.Println(strings.Repeat("=", len(header)))
+		fmt.Println(entity)
+	} else {
+		log.Printf("Error GET %s: %s", header, err)
 	}
 }

@@ -3,15 +3,20 @@ auth_url = 'https://stageauth.equilend.com/auth'
 realm_name = '1Source'
 
 [endpoints]
-events = 'https://stageapi.equilend.com/v1/ledger/events'
+base = 'https://stageapi.equilend.com/v1/ledger/'
 parties = 'https://stageapi.equilend.com/v1/ledger/parties'
+events = 'https://stageapi.equilend.com/v1/ledger/events'
 agreements = 'https://stageapi.equilend.com/v1/ledger/agreements'
 contracts = 'https://stageapi.equilend.com/v1/ledger/contracts'
+rerates = 'https://stageapi.equilend.com/v1/ledger/rerates'
+returns = 'https://stageapi.equilend.com/v1/ledger/returns'
+recalls = 'https://stageapi.equilend.com/v1/ledger/recalls'
+buyins = 'https://stageapi.equilend.com/v1/ledger/buyins'
 
 [authentication]
 auth_type = 'BEARER'
 grant_type = 'password'
 client_id = 'canton-participant1-client'
-username = 'TestBorrower1User'
-password = 'FqnNQyUwaenQ8K3h'
+username = 'TestLender1User'
+password = 'fjmxVeKzpzUDg3YJ'
 client_secret = 'c0a05c2d-ac70-472a-ac4f-38b80dba28d8'
