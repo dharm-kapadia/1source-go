@@ -49,7 +49,7 @@ In the terminal, make sure you are in the 1source-go root directory. Enter the f
 ```
 1source-go> go build -o 1source-go
 ```
-This will create a command-line executable called '1source-go'.
+This will create a command-line executable called '1source-go'. You can change the name of the executable by replacing '1source-go' in the above command to whatever you would prefer, such as just '1source'.
 
 ### Executing program
 
@@ -64,18 +64,21 @@ The output of that will show the command line options available:
 ```
 1source-go> ./1source-go
 -t: required.
-Usage: 1Source [--help] [--version] -t VAR [-g VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]
+Usage: 1Source [--help] [--version] -t VAR [-g VAR] [-a agreement_id] [-e events] [-c contract_id] [-p party_id] [-i JSON]
 Note: -t is required
 
 Optional arguments:
   -h, --help     shows help message and exits
   -v, --version  prints version information and exits
+
   -t             1Source configuration TOML file [required]
   -g             1Source API Endpoint to query [agreements, contracts, events, parties, returns, rerates, recalls, buyins]
   -a             1Source API Endpoint to query trade agreements by agreement_id
   -e             1Source API Endpoint to query events by event_id
   -c             1Source API Endpoint to query contracts by contract_id
   -p             1Source API Endpoint to query parties by party_id
+
+  -t             1Source API Endpoint to propose a contract from a JSON file
 ```
 
 The '-t' command line parameter specifies the application TOML configuration file and is required, even if no other command line parameters are included.
@@ -217,6 +220,10 @@ The 1Source command line application supports proposing a new contract. The comm
 1source-go> ./1source -t configuration.toml -i <JSON contract file>
 ```
 The application will read in the data from the JSON file and post it to the 1Source API to directly create a new contract in a 'PROPOSED' state. The project contains a sample JSON contract file called 'proposed_trade.json'.
+
+### Notes
+* The 1Source command line application logs output to a file called '1source-go.log'.
+* The name of the output log file can be changed in the source, which will require the program to be recompiled as detailed above.
 
 ### Configuration TOML Specification
 The 1source command-line application reads data from a configuration file in TOML format. The file contains information required for the application to connect to the 1Source REST API, the individual endpoints, and the authentication details. The TOML file reflects that by have 3 required sections
