@@ -210,6 +210,14 @@ Similar to the Events call, to retrieve all buyins which the user is authorized 
 1source-go> ./1source -t configuration.toml -g buyins
 ```
 
+### Proposing a Contract
+The 1Source command line application supports proposing a new contract. The command to do that is:
+
+```
+1source-go> ./1source -t configuration.toml -i <JSON contract file>
+```
+The application will read in the data from the JSON file and post it to the 1Source API to directly create a new contract in a 'PROPOSED' state. The project contains a sample JSON contract file called 'proposed_trade.json'.
+
 ### Configuration TOML Specification
 The 1source command-line application reads data from a configuration file in TOML format. The file contains information required for the application to connect to the 1Source REST API, the individual endpoints, and the authentication details. The TOML file reflects that by have 3 required sections
 * general
