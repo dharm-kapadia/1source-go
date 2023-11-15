@@ -62,3 +62,24 @@ func ReadTOML(filename string) (*models.AppConfig, error) {
 
 	return &appConfig, err
 }
+
+// displayVersion prints the program version
+func DisplayVersion() {
+	fmt.Println("1source-go V0.2")
+}
+
+// displayHelp creates the complete help string output for the command line
+func DisplayHelp() {
+	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]\n")
+	fmt.Print("Note: -t is required\n\n")
+	fmt.Println("Optional arguments:")
+	fmt.Println("-h, --help\tshows help message and exits")
+	fmt.Println("-v, --version\tprints version information and exits")
+	fmt.Println("-t\t\t1Source configuration TOML file [required]")
+	fmt.Println("-g\t\t1Source API Endpoint to query [agreements, contracts, events, parties, returns, rerates, recalls, buyins]")
+
+	fmt.Println("-a\t\t1Source API Endpoint to query trade agreements by agreement_id")
+	fmt.Println("-e\t\t1Source API Endpoint to query events by event_id")
+	fmt.Println("-c\t\t11Source API Endpoint to query contracts by contract_id")
+	fmt.Println("-p\t\t1Source API Endpoint to query parties by party_id")
+}

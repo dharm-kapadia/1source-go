@@ -12,35 +12,13 @@ import (
 )
 
 var (
-	LogFile  = "1source-go.log"
-	fileName string
-	token    *gocloak.JWT
+	LogFile   = "1source-go.log"
+	fileName  string
+	token     *gocloak.JWT
+	appConfig *models.AppConfig
 )
 
-// displayVersion prints the program version
-func displayVersion() {
-	fmt.Println("1source-go V0.2")
-}
-
-// displayHelp creates the complete help string output for the command line
-func displayHelp() {
-	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]\n")
-	fmt.Print("Note: -t is required\n\n")
-	fmt.Println("Optional arguments:")
-	fmt.Println("-h, --help\tshows help message and exits")
-	fmt.Println("-v, --version\tprints version information and exits")
-	fmt.Println("-t\t\t1Source configuration TOML file [required]")
-	fmt.Println("-g\t\t1Source API Endpoint to query [agreements, contracts, events, parties, returns, rerates, recalls, buyins ]")
-
-	fmt.Println("-a\t\t1Source API Endpoint to query trade agreements by agreement_id")
-	fmt.Println("-e\t\t1Source API Endpoint to query events by event_id")
-	fmt.Println("-c\t\t11Source API Endpoint to query contracts by contract_id")
-	fmt.Println("-p\t\t1Source API Endpoint to query parties by party_id")
-}
-
 func main() {
-	var appConfig *models.AppConfig
-
 	// Open the log file
 	var logFile, err = os.OpenFile(LogFile, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 
@@ -60,7 +38,7 @@ func main() {
 
 	// Begin parsing the command line arguments
 	if len(os.Args) == 1 {
-		displayHelp()
+		utils.DisplayHelp()
 
 		// Graceful exit after displaying help
 		os.Exit(0)
@@ -72,11 +50,11 @@ func main() {
 	if len(argsWithoutProg) == 1 {
 		switch argsWithoutProg[0] {
 		case "--help", "help", "-h":
-			displayHelp()
+			utils.DisplayHelp()
 		case "--version", "-v":
-			displayVersion()
+			utils.DisplayVersion()
 		default:
-			displayHelp()
+			utils.DisplayHelp()
 		}
 
 		// Graceful exit after displaying help
@@ -189,9 +167,9 @@ func main() {
 			endPoint = appConfig.Endpoints.Parties + "/" + entity
 			api.GetEntityById(endPoint, entity, bearer, "Party")
 
-		// Propose contract
-		case "-i":
-			endPoint = appConfig.Endpoints.Contracts
+			// Propose contract
+			// case "-i":
+			// 	endPoint = appConfig.Endpoints.Contracts
 		}
 	}
 }
