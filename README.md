@@ -27,7 +27,15 @@ Clone the code repository locally from GitHub with the following command:
 > cd 1source-go
 ```
 
-Install the required Go libraries by entering the following command:
+Install the required 3rd-party Go libraries by entering the following command:
+
+```
+1source-go> go get github.com/Nerzal/gocloak/v13
+1source-go> go get github.com/pelletier/go-toml/v2
+
+```
+
+Install the 3rd-party Go library dependencies by entering the following command:
 
 ```
 1source-go> go mod tidy
@@ -56,14 +64,14 @@ The output of that will show the command line options available:
 ```
 1source-go> ./1source-go
 -t: required.
-Usage: 1Source [--help] [--version] -t VAR [-o VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]
+Usage: 1Source [--help] [--version] -t VAR [-g VAR] [-a VAR] [-e VAR] [-c VAR] [-p VAR]
 Note: -t is required
 
 Optional arguments:
   -h, --help     shows help message and exits
   -v, --version  prints version information and exits
   -t             1Source configuration TOML file [required]
-  -o             1Source API Endpoint to query [agreements, contracts, events, parties ]
+  -g             1Source API Endpoint to query [agreements, contracts, events, parties, returns, rerates, recalls, buyins]
   -a             1Source API Endpoint to query trade agreements by agreement_id
   -e             1Source API Endpoint to query events by event_id
   -c             1Source API Endpoint to query contracts by contract_id
@@ -84,12 +92,16 @@ The 1Source REST API can return the following entities:
 * parties
 * agreements
 * contracts
+* rerates
+* returns
+* recalls
+* buyins
 
 #### Events
 To retrieve all events which the user is authorized to view, the following command will do so:
 
 ```
-1source-go> ./1source -t configuration.toml -o events
+1source-go> ./1source -t configuration.toml -g events
 ```
 
 The output of the command to retrieve events will be a JSON response from the 1Source REST API similar to:
@@ -138,7 +150,7 @@ The expected response for that call would be similar to:
 Similar to the Events call, to retrieve all parties which the user is authorized to view, the following command will do so:
 
 ```
-1source-go> ./1source -t configuration.toml -o parties
+1source-go> ./1source -t configuration.toml -g parties
 ```
 
 The REST API can be queried for a particular party with a party_id
@@ -162,12 +174,40 @@ The REST API can be queried for a particular agreement with an agreement_id
 Similar to the Events call, to retrieve all contracts which the user is authorized to view, the following command will do so:
 
 ```
-1source-go> ./1source -t configuration.toml -o contracts
+1source-go> ./1source -t configuration.toml -g contracts
 ```
 
 The REST API can be queried for a particular contract with a contract_id
 ```
 1source-go> ./1source -t configuration.toml -c c2098d72-89c0-49f7-829a-e9
+```
+
+#### Rerates
+Similar to the Events call, to retrieve all rerates which the user is authorized to view, the following command will do so:
+
+```
+1source-go> ./1source -t configuration.toml -g rerates
+```
+
+#### Returns
+Similar to the Events call, to retrieve all returns which the user is authorized to view, the following command will do so:
+
+```
+1source-go> ./1source -t configuration.toml -g returns
+```
+
+#### Recalls
+Similar to the Events call, to retrieve all recalls which the user is authorized to view, the following command will do so:
+
+```
+1source-go> ./1source -t configuration.toml -g recalls
+```
+
+#### Buyins
+Similar to the Events call, to retrieve all buyins which the user is authorized to view, the following command will do so:
+
+```
+1source-go> ./1source -t configuration.toml -g buyins
 ```
 
 ### Configuration TOML Specification
@@ -200,6 +240,9 @@ Contributors names and contact info
 
 * 0.1
     * Initial Release
+* 0.2
+    * Refactor code
+    * Add support for rerates, returns, recalls, buyins
 
 ## Acknowledgments
 

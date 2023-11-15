@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/dharm-kapadia/1source-go/api"
@@ -16,12 +15,11 @@ var (
 	LogFile  = "1source-go.log"
 	fileName string
 	token    *gocloak.JWT
-	endPoint string
 )
 
 // displayVersion prints the program version
 func displayVersion() {
-	fmt.Println("1source-go V0.1")
+	fmt.Println("1source-go V0.2")
 }
 
 // displayHelp creates the complete help string output for the command line
@@ -140,84 +138,60 @@ func main() {
 		param := argsWithoutProg[2]
 		entity := argsWithoutProg[3]
 
+		var endPoint string
+
 		switch param {
 		// Get all of a particular type from the API
 		case "-g":
 			switch entity {
 			case "events":
-				getEntity(appConfig.Endpoints.Parties, bearer, "1Source Events")
+				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Events")
 
 			case "parties":
-				getEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties")
+				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties")
 
 			case "agreements":
-				getEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements")
+				api.GetEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements")
 
 			case "contracts":
-				getEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts")
+				api.GetEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts")
 
 			case "rerates":
-				getEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates")
+				api.GetEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates")
 
 			case "returns":
-				getEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns")
+				api.GetEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns")
 
 			case "recalls":
-				getEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls")
+				api.GetEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls")
 
 			case "buyins":
-				getEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins")
+				api.GetEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins")
 			}
 
 		// Get trade agreement by agreement_id
 		case "-a":
 			endPoint = appConfig.Endpoints.Agreements + "/" + entity
-			getEntityById(endPoint, entity, bearer, "Agreement")
+			api.GetEntityById(endPoint, entity, bearer, "Agreement")
 
 		// Get event agreement by event_id
 		case "-e":
 			endPoint = appConfig.Endpoints.Events + "/" + entity
-			getEntityById(endPoint, entity, bearer, "Event")
+			api.GetEntityById(endPoint, entity, bearer, "Event")
 
 		// Get contract by contract_id
 		case "-c":
 			endPoint = appConfig.Endpoints.Contracts + "/" + entity
-			getEntityById(endPoint, entity, bearer, "Contract")
+			api.GetEntityById(endPoint, entity, bearer, "Contract")
 
 		// Get party by party_id
 		case "-p":
 			endPoint = appConfig.Endpoints.Parties + "/" + entity
-			getEntityById(endPoint, entity, bearer, "Party")
+			api.GetEntityById(endPoint, entity, bearer, "Party")
 
 		// Propose contract
 		case "-i":
 			endPoint = appConfig.Endpoints.Contracts
 		}
-	}
-}
-
-// getEntityById is a helper function to perform an HTTP GET to
-// retrieve a particular entity by Id from the 1Source REST API
-func getEntityById(endPoint string, id, bearer string, header string) {
-	agreement, err := api.Get(endPoint, bearer)
-	if err == nil {
-		fmt.Println(header)
-		fmt.Println(strings.Repeat("=", len(header)))
-		fmt.Println(agreement)
-	} else {
-		log.Printf("Error GET %s by id [%s]: %s", header, id, err)
-	}
-}
-
-// getEntity is a helper function to perform an HTTP GET
-// to retrieve entity-level data from the 1Source REST API
-func getEntity(endPoint string, bearer string, header string) {
-	entity, err := api.Get(endPoint, bearer)
-	if err == nil {
-		fmt.Println(header)
-		fmt.Println(strings.Repeat("=", len(header)))
-		fmt.Println(entity)
-	} else {
-		log.Printf("Error GET %s: %s", header, err)
 	}
 }
