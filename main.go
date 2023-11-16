@@ -122,28 +122,44 @@ func main() {
 		case "-g":
 			switch entity {
 			case "events":
-				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Events", true)
+				header := "1Source Events"
+				events, err := api.GetEntity(appConfig.Endpoints.Events, bearer, header)
+				utils.PrintResults(err, events, "Error retrieving 1Source Events: ", header)
 
 			case "parties":
-				api.GetEntity(appConfig.Endpoints.Parties, bearer, "1Source Parties", true)
+				header := "1Source Parties"
+				parties, err := api.GetEntity(appConfig.Endpoints.Parties, bearer, header)
+				utils.PrintResults(err, parties, "Error retrieving 1Source Parties: ", header)
 
 			case "agreements":
-				api.GetEntity(appConfig.Endpoints.Agreements, bearer, "1Source Agreements", true)
+				header := "1Source Trade Agreements"
+				tas, err := api.GetEntity(appConfig.Endpoints.Agreements, bearer, header)
+				utils.PrintResults(err, tas, "Error retrieving 1Source Trade Agreements: ", header)
 
 			case "contracts":
-				api.GetEntity(appConfig.Endpoints.Contracts, bearer, "1Source Contracts", true)
+				header := "1Source Contracts"
+				contracts, err := api.GetEntity(appConfig.Endpoints.Contracts, bearer, header)
+				utils.PrintResults(err, contracts, "Error retrieving 1Source Contracts: ", header)
 
 			case "rerates":
-				api.GetEntity(appConfig.Endpoints.Rerates, bearer, "1Source Rerates", true)
+				header := "1Source Rerates"
+				rerates, err := api.GetEntity(appConfig.Endpoints.Rerates, bearer, header)
+				utils.PrintResults(err, rerates, "Error retrieving 1Source Rerates: ", header)
 
 			case "returns":
-				api.GetEntity(appConfig.Endpoints.Returns, bearer, "1Source Returns", true)
+				header := "1Source Returns"
+				returns, err := api.GetEntity(appConfig.Endpoints.Returns, bearer, header)
+				utils.PrintResults(err, returns, "Error retrieving 1Source Returns: ", header)
 
 			case "recalls":
-				api.GetEntity(appConfig.Endpoints.Recalls, bearer, "1Source Recalls", true)
+				header := "1Source Recalls"
+				recalls, err := api.GetEntity(appConfig.Endpoints.Recalls, bearer, header)
+				utils.PrintResults(err, recalls, "Error retrieving 1Source Recalls: ", header)
 
 			case "buyins":
-				api.GetEntity(appConfig.Endpoints.Buyins, bearer, "1Source Buyins", true)
+				header := "1Source Buyins"
+				buyins, err := api.GetEntity(appConfig.Endpoints.Buyins, bearer, header)
+				utils.PrintResults(err, buyins, "Error retrieving 1Source Buyins: ", header)
 
 			default:
 				log.Println("Unknown command-line entity entered: ", entity)
@@ -152,19 +168,31 @@ func main() {
 
 		// Get trade agreement by agreement_id
 		case "-a":
-			api.GetEntityById(appConfig.Endpoints.Agreements, entity, bearer, "Agreement", true)
+			header := "1Source Trade Agreement"
+			agreement, err := api.GetEntityById(appConfig.Endpoints.Agreements, entity, bearer, header)
+			prompt := fmt.Sprintf("Error retrieving 1Source with Trade Agreement Id = [%s]: ", entity)
+			utils.PrintResults(err, agreement, prompt, header)
 
 		// Get event agreement by event_id
 		case "-e":
-			api.GetEntityById(appConfig.Endpoints.Events, entity, bearer, "Event", true)
+			header := "1Source Event"
+			event, err := api.GetEntityById(appConfig.Endpoints.Events, entity, bearer, header)
+			prompt := fmt.Sprintf("Error retrieving 1Source with Event Id = [%s]: ", entity)
+			utils.PrintResults(err, event, prompt, header)
 
 		// Get contract by contract_id
 		case "-c":
-			api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "Contract", true)
+			header := "1Source Contract"
+			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, header)
+			prompt := fmt.Sprintf("Error retrieving 1Source with Contract Id = [%s]: ", entity)
+			utils.PrintResults(err, contract, prompt, header)
 
 		// Get party by party_id
 		case "-p":
-			api.GetEntityById(appConfig.Endpoints.Parties, entity, bearer, "Party", true)
+			header := "1Source Party"
+			party, err := api.GetEntityById(appConfig.Endpoints.Parties, entity, bearer, "Party")
+			prompt := fmt.Sprintf("Error retrieving 1Source with party Id = [%s]: ", entity)
+			utils.PrintResults(err, party, prompt, header)
 
 		// Propose contract
 		case "-cp":
@@ -186,7 +214,7 @@ func main() {
 		// Cancel and proposed contract
 		case "-ca":
 			// Get the Contract by contract_id to check that it is in the proposed state
-			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "Contract", false)
+			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "1Source Contract")
 
 			if err != nil {
 				log.Printf("Error GET %s by id [%s]: %s", "Contract", entity, err)

@@ -1,3 +1,4 @@
+// utils contains utility functions
 package utils
 
 import (
@@ -5,11 +6,13 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 
 	models "github.com/dharm-kapadia/1source-go/models"
 	"github.com/pelletier/go-toml/v2"
 )
 
+// FileExists checks that the specified file exists
 func FileExists(filename string) bool {
 	info, err := os.Stat(filename)
 
@@ -23,6 +26,7 @@ func FileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+// ReadTOML opens and reads in application configuration TOML file
 func ReadTOML(filename string) (*models.AppConfig, error) {
 	var appConfig models.AppConfig
 	var err error
@@ -63,12 +67,12 @@ func ReadTOML(filename string) (*models.AppConfig, error) {
 	return &appConfig, err
 }
 
-// displayVersion prints the program version
+// DisplayVersion prints the program version
 func DisplayVersion() {
 	fmt.Println("1source-go V0.2")
 }
 
-// displayHelp creates the complete help string output for the command line
+// DisplayHelp creates the complete help string output for the command line
 func DisplayHelp() {
 	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-g VAR] [-a agreement_id] [-e events] [-c contract_id] [-p party_id] [-i JSON]\n")
 	fmt.Print("Note: -t is required\n\n")
@@ -88,4 +92,15 @@ func DisplayHelp() {
 	fmt.Println("-ca\t\t1Source API Endpoint to approve a proposed contract by contract_id")
 	fmt.Println("-cd\t\t1Source API Endpoint to decline a proposed contract by contract_id")
 	fmt.Println("")
+}
+
+// PrintResults outputs entities fetched from the 1Source REST API to the console
+func PrintResults(err error, entity string, prompt string, header string) {
+	if err != nil {
+		fmt.Println(prompt, err)
+	} else {
+		fmt.Println(header)
+		fmt.Println(strings.Repeat("=", len(header)))
+		fmt.Println(entity)
+	}
 }

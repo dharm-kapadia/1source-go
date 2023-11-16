@@ -3,7 +3,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -65,16 +64,10 @@ func Get(apiEndPoint string, bearer string) (string, error) {
 
 // GetEntityById is a helper function to perform an HTTP GET to
 // retrieve a particular entity by Id from the 1Source REST API
-func GetEntityById(endPoint string, entity string, bearer string, header string, toConsole bool) (string, error) {
+func GetEntityById(endPoint string, entity string, bearer string, header string) (string, error) {
 	url := endPoint + "/" + entity
 	entity, err := Get(url, bearer)
 	if err == nil {
-		if toConsole {
-			fmt.Println(header)
-			fmt.Println(strings.Repeat("=", len(header)))
-			fmt.Println(entity)
-		}
-
 		log.Println(header)
 		log.Println(strings.Repeat("=", len(header)))
 		log.Println(entity)
@@ -89,15 +82,9 @@ func GetEntityById(endPoint string, entity string, bearer string, header string,
 
 // GetEntity is a helper function to perform an HTTP GET
 // to retrieve entity-level data from the 1Source REST API
-func GetEntity(endPoint string, bearer string, header string, toConsole bool) (string, error) {
+func GetEntity(endPoint string, bearer string, header string) (string, error) {
 	entity, err := Get(endPoint, bearer)
 	if err == nil {
-		if toConsole {
-			fmt.Println(header)
-			fmt.Println(strings.Repeat("=", len(header)))
-			fmt.Println(entity)
-		}
-
 		log.Println(header)
 		log.Println(strings.Repeat("=", len(header)))
 		log.Println(entity)
