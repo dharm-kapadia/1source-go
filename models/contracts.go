@@ -107,5 +107,15 @@ type (
 )
 
 type ContractInitiationResponse struct {
-	Message string
+	Timestamp string `json:"timestamp"`
+	Status    uint32 `json:"status"`
+	Message   string `json:"message"`
+	Path      string `json:"path"`
+}
+
+type ContractCancelReponse struct {
+	Timestamp string `json:"timestamp"`
+	Status    uint32 `json:"status"`
+	Message   string `json:"message"`
+	Path      string `json:"path"`
 }

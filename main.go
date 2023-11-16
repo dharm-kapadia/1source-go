@@ -204,15 +204,16 @@ func main() {
 			}
 
 			// Do HTTP PostProposeContract to initiate the contract
-			// Errors are handled in the function
-			_, err = api.PostProposeContract(appConfig.Endpoints.Contracts, bearer, body)
+			resp, err := api.PostProposeContract(appConfig.Endpoints.Contracts, bearer, body)
 
 			if err == nil {
-				fmt.Println("Successfully created Proposed Contract")
+				fmt.Println("Success: ", resp)
+			} else {
+				fmt.Println("Error proposing contract: ", err)
 			}
 
-		// Cancel and proposed contract
-		case "-ca":
+		// Cancel a proposed contract
+		case "-cc":
 			// Get the Contract by contract_id to check that it is in the proposed state
 			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, "1Source Contract")
 
@@ -221,9 +222,18 @@ func main() {
 			} else {
 				// Check the state of the contract
 				if strings.Contains(contract, "PROPOSED") {
-					fmt.Println(contract)
+					// Do HTTP PostCancelContract to cancel the contract
+					endPoint := appConfig.Endpoints.Contracts + "/" + entity + "/cancel"
+					resp, err := api.PostCancelContract(endPoint, bearer)
+
+					if err == nil {
+						fmt.Println("Successful: ", resp)
+					} else {
+						fmt.Println("Error canceling contract: ", err)
+					}
+
 				} else {
-					fmt.Printf("Contract with id [%s] is not in PROPOSED state\n", entity)
+					fmt.Printf("Contract with id [%s] is not in PROPOSED state and cannot be canceled\n", entity)
 				}
 			}
 
