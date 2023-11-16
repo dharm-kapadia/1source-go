@@ -78,12 +78,15 @@ Optional arguments:
   -c             1Source API Endpoint to query contracts by contract_id
   -p             1Source API Endpoint to query parties by party_id
 
-  -t             1Source API Endpoint to propose a contract from a JSON file
+  -cp            1Source API Endpoint to PROPOSE a contract from a JSON file
+  -cc            1Source API Endpoint to CANCEL a proposed contract by contract_id
+  -ca            1Source API Endpoint to APPROVE a proposed contract by contract_id
+  -cd            1Source API Endpoint to DECLINE a proposed contract by contract_id
 ```
 
 The '-t' command line parameter specifies the application TOML configuration file and is required, even if no other command line parameters are included.
 
-The default TOML configuration file is called 'configuration.toml' and is included in the respoitory.
+The default TOML configuration file is called 'configuration.toml' and is included in the repository.
 
 ```
 1source-go> ./1source -t configuration.toml
@@ -217,9 +220,37 @@ Similar to the Events call, to retrieve all buyins which the user is authorized 
 The 1Source command line application supports proposing a new contract. The command to do that is:
 
 ```
-1source-go> ./1source -t configuration.toml -i <JSON contract file>
+1source-go> ./1source -t configuration.toml -cp <JSON contract file>
 ```
-The application will read in the data from the JSON file and post it to the 1Source API to directly create a new contract in a 'PROPOSED' state. The project contains a sample JSON contract file called 'proposed_trade.json'.
+* The application will read in the data from the JSON file and post it to the 1Source API to directly create a new contract in a 'PROPOSED' state. 
+* The project contains a sample JSON contract file called 'proposed_trade.json'.
+
+### Canceling a Contract
+The 1Source command line application supports canceling a proposed contract. The command to do that is:
+
+```
+1source-go> ./1source -t configuration.toml -cc <contract_id>
+```
+* The application will retrieve the contract and verify it is in a "PROPOSED" state before canceling.
+* Only the original proposer of the contract can cancel it. The counterparty can decline the proposed contract instead.
+
+### Approving a Contract
+The 1Source command line application supports approving a proposed contract. The command to do that is:
+
+```
+1source-go> ./1source -t configuration.toml -ca <contract_id>
+```
+* The application will retrieve the contract and verify it is in a "PROPOSED" state before approving.
+* Only the counterparty to the original proposer of the contract can approve it. The original contract proposer can cancel it instead.
+
+### Declining a Contract
+The 1Source command line application supports decling a proposed contract. The command to do that is:
+
+```
+1source-go> ./1source -t configuration.toml -cd <contract_id>
+```
+* The application will retrieve the contract and verify it is in a "PROPOSED" state before declining.
+* Only the counterparty to the original proposer of the contract can decline it. The original contract proposer can cancel it instead.
 
 ### Notes
 * The 1Source command line application logs output to a file called '1source-go.log'.
