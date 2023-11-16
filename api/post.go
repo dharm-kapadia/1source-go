@@ -80,8 +80,8 @@ func PostProposeContract(apiEndPoint string, bearer string, body []byte) (string
 	return "", err
 }
 
-// PostProposeContract will perform an HTTP POST operation
-// against the 1Source REST API to propose a contract
+// PostCancelContract will perform an HTTP POST operation
+// against the 1Source REST API to cancel a contract
 // https://www.kirandev.com/http-post-golang
 func PostCancelContract(apiEndPoint string, bearer string) (string, error) {
 	ctx := context.Background()
@@ -141,6 +141,72 @@ func PostCancelContract(apiEndPoint string, bearer string) (string, error) {
 		}
 
 		return ccr.Message, err
+	}
+
+	return "", err
+}
+
+// PostDeclineContract will perform an HTTP POST operation
+// against the 1Source REST API to decline a contract
+// https://www.kirandev.com/http-post-golang
+func PostDeclineContract(apiEndPoint string, bearer string) (string, error) {
+	ctx := context.Background()
+	transport := &http.Transport{
+		Proxy: func(r *http.Request) (*url.URL, error) {
+			r.Header.Set("Authorization", bearer)
+			r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+			return nil, nil
+		},
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   time.Duration(15) * time.Second,
+	}
+
+	request, err := http.NewRequestWithContext(ctx, "POST", apiEndPoint, nil)
+	request.Header.Set("Authorization", bearer)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	if err != nil {
+		log.Println("Error creating new HTTP Request: ", err)
+		return "", err
+	}
+
+	log.Println("Calling API endpoint: ", apiEndPoint)
+	resp, err := client.Do(request)
+
+	// Close response body
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	if err != nil {
+		log.Fatal("Error in HTTP POST API call: ", err)
+		return "", err
+	}
+
+	respBody, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatal("Error reading HTTP POST response: ", err)
+		return "", err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		log.Println("Error declining proposed contract. HTTP Response Status:", resp.Status)
+	} else {
+		var cdr models.ContractDeclineReponse
+
+		err := json.Unmarshal(respBody, &cdr)
+		if err != nil {
+			return "", err
+		}
+
+		return cdr.Message, err
 	}
 
 	return "", err

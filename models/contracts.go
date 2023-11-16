@@ -3,12 +3,12 @@ package models
 
 type (
 	Contract struct {
-		ContractId         string
-		LastEventId        uint32
-		ContractStatus     string
-		SettlementStatus   string
-		LastUpdatePartyId  string
-		LastUpdateDateTime string
+		ContractId         string `json:"contractId"`
+		LastEventId        uint32 `json:"lastEventId"`
+		ContractStatus     string `json:"contractStatus"`
+		SettlementStatus   string `json:"settlementStatus"`
+		LastUpdatePartyId  string `json:"lastUpdatePartyId"`
+		LastUpdateDateTime string `json:"lastUpdateDateTime"`
 		Trade              trade
 		Settlement         settlement
 	}
@@ -16,40 +16,40 @@ type (
 	trade struct {
 		ExecutionVenue     executionvenue
 		Instrument         instrument
-		Rate               rate
-		Quantity           uint32
-		BillingCurrency    string
-		DividentRatePct    float32
-		TradeDate          string
-		SettlementType     string
+		Rate               rate    `json:"rate"`
+		Quantity           uint32  `json:"quantity"`
+		BillingCurrency    string  `json:"billingCurrency"`
+		DividendRatePct    float32 `json:"dividendRatePct"`
+		TradeDate          string  `json:"tradeDate"`
+		SettlementType     string  `json:"settlementType"`
 		Collateral         collateral
 		TransactingParties []transactingparties
 	}
 
 	executionvenue struct {
-		Evtype       string
+		VenueType    string `json:"type"`
 		Platform     platform
 		VenueParties []venueparties
 	}
 
 	venueparties struct {
-		PartyRole string
+		PartyRole string `json:"partyRole"`
 	}
 
 	platform struct {
-		GleifLei   string
-		LegalName  string
-		VenueName  string
-		VenueRefId string
+		GleifLei   string `json:"gliefLei"`
+		LegalName  string `json:"legalName"`
+		VenueName  string `json:"venueName"`
+		VenueRefId string `json:"venueRefId"`
 	}
 
 	instrument struct {
-		Ticker      string
-		Cusip       string
-		Isin        string
-		Sedol       string
-		Figi        string
-		Description string
+		Ticker      string `json:"ticker"`
+		Cusip       string `json:"cusip"`
+		Isin        string `json:"isin"`
+		Sedol       string `json:"sedol"`
+		Figi        string `json:"figi"`
+		Description string `json:"description"`
 	}
 
 	rate struct {
@@ -61,61 +61,47 @@ type (
 	}
 
 	fixed struct {
-		BaseRate      float32
-		EffectiveDate string
-		EffectiveRate float32
+		BaseRate      float32 `json:"baseRate"`
+		EffectiveDate string  `json:"effectiveDate"`
+		EffectiveRate float32 `json:"effectiveRate"`
 	}
 
 	collateral struct {
-		ContractValue   float64
-		CollateralValue float64
-		Currency        string
-		RoundingRule    uint32
-		RoundingMode    string
-		Margin          uint32
+		ContractValue   float64 `json:"contractValue"`
+		CollateralValue float64 `json:"collateralValue"`
+		Currency        string  `json:"currency"`
+		RoundingRule    uint32  `json:"roundingRule"`
+		RoundingMode    string  `json:"roundingMode"`
+		Margin          uint32  `json:"margin"`
 	}
 
 	transactingparties struct {
-		PartyRole string
+		PartyRole string `json:"partyRole"`
 		Party     party
 	}
 
 	party struct {
-		PartyId         string
-		PartyName       string
-		GleifLei        string
-		InternalPartyId string
+		PartyId         string `json:"partyId"`
+		PartyName       string `json:"partyName"`
+		GleifLei        string `json:"gleifLei"`
+		InternalPartyId string `json:"internalPartyId"`
 	}
 
 	settlement struct {
-		PartyRole   string
+		PartyRole   string `json:"partyRole"`
 		Instruction instruction
 	}
 
 	instruction struct {
-		SettlementBic     string
-		LocalAgentBic     string
-		LocalAgentName    string
-		LocalAgentAcct    string
+		SettlementBic     string `json:"SettlementBic"`
+		LocalAgentBic     string `json:"localAgentBic"`
+		LocalAgentName    string `json:"localAgentName"`
+		LocalAgentAcct    string `json:"localAgentAcct"`
 		LocalMarketFields localmarketfields
 	}
 
 	localmarketfields struct {
-		LocalFieldName  string
-		LocalFieldValue string
+		LocalFieldName  string `json:"localFieldName"`
+		LocalFieldValue string `json:"localFieldValue"`
 	}
 )
-
-type ContractInitiationResponse struct {
-	Timestamp string `json:"timestamp"`
-	Status    uint32 `json:"status"`
-	Message   string `json:"message"`
-	Path      string `json:"path"`
-}
-
-type ContractCancelReponse struct {
-	Timestamp string `json:"timestamp"`
-	Status    uint32 `json:"status"`
-	Message   string `json:"message"`
-	Path      string `json:"path"`
-}

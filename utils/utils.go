@@ -74,7 +74,7 @@ func DisplayVersion() {
 
 // DisplayHelp creates the complete help string output for the command line
 func DisplayHelp() {
-	fmt.Print("Usage: 1Source [--help] [--version] -t VAR [-g VAR] [-a agreement_id] [-e events] [-c contract_id] [-p party_id] [-i JSON]\n")
+	fmt.Print("Usage: 1Source [--help] [--version] -t VAR\n")
 	fmt.Print("Note: -t is required\n\n")
 	fmt.Println("Optional arguments:")
 	fmt.Println("-h, --help\tshows help message and exits")
@@ -85,6 +85,7 @@ func DisplayHelp() {
 	fmt.Println("-a\t\t1Source API Endpoint to query trade agreements by agreement_id")
 	fmt.Println("-e\t\t1Source API Endpoint to query events by event_id")
 	fmt.Println("-c\t\t1Source API Endpoint to query contracts by contract_id")
+	fmt.Println("-ch\t\t1Source API Endpoint to get contract history by contract_id")
 	fmt.Print("-p\t\t1Source API Endpoint to query parties by party_id\n\n")
 
 	fmt.Println("-cp\t\t1Source API Endpoint to PROPOSE a contract from a JSON file")
@@ -95,12 +96,12 @@ func DisplayHelp() {
 }
 
 // PrintResults outputs entities fetched from the 1Source REST API to the console
-func PrintResults(err error, entity string, prompt string, header string) {
+func PrintResults(err error, data string, prompt string, header string) {
 	if err != nil {
 		fmt.Println(prompt, err)
 	} else {
 		fmt.Println(header)
 		fmt.Println(strings.Repeat("=", len(header)))
-		fmt.Println(entity)
+		fmt.Println(data)
 	}
 }
