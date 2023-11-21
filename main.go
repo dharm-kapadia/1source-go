@@ -169,28 +169,36 @@ func main() {
 		// Get trade agreement by agreement_id
 		case "-a":
 			header := "1Source Trade Agreement"
-			prompt := fmt.Sprintf("Error retrieving 1Source with Trade Agreement Id = [%s]: ", entity)
+			prompt := fmt.Sprintf("Error retrieving Trade Agreement with agreement_id = [%s]: ", entity)
 			agreement, err := api.GetEntityById(appConfig.Endpoints.Agreements, entity, bearer, header)
 			utils.PrintResults(err, agreement, prompt, header)
 
 		// Get event agreement by event_id
 		case "-e":
 			header := "1Source Event"
-			prompt := fmt.Sprintf("Error retrieving 1Source with Event Id = [%s]: ", entity)
+			prompt := fmt.Sprintf("Error retrieving Event with event_id = [%s]: ", entity)
 			event, err := api.GetEntityById(appConfig.Endpoints.Events, entity, bearer, header)
 			utils.PrintResults(err, event, prompt, header)
 
 		// Get contract by contract_id
 		case "-c":
 			header := "1Source Contract"
-			prompt := fmt.Sprintf("Error retrieving 1Source with Contract Id = [%s]: ", entity)
+			prompt := fmt.Sprintf("Error retrieving Contract with contract_id = [%s]: ", entity)
 			contract, err := api.GetEntityById(appConfig.Endpoints.Contracts, entity, bearer, header)
 			utils.PrintResults(err, contract, prompt, header)
+
+		// Get contract history by contract_id
+		case "-ch":
+			header := "1Source Contract History"
+			prompt := fmt.Sprintf("Error retrieving Contract History with contract_id = [%s]: ", entity)
+			endPoint := appConfig.Endpoints.Contracts + "/" + entity + "/history"
+			history, err := api.GetEntity(endPoint, bearer, header)
+			utils.PrintResults(err, history, prompt, header)
 
 		// Get party by party_id
 		case "-p":
 			header := "1Source Party"
-			prompt := fmt.Sprintf("Error retrieving 1Source with party Id = [%s]: ", entity)
+			prompt := fmt.Sprintf("Error retrieving 1Source with party_id = [%s]: ", entity)
 			party, err := api.GetEntityById(appConfig.Endpoints.Parties, entity, bearer, "Party")
 			utils.PrintResults(err, party, prompt, header)
 
